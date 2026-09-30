@@ -1,0 +1,682 @@
+{
+	"info": {
+		"_postman_id": "c1f2e3d4-5678-90ab-cdef-1234567890ab",
+		"name": "HealthConnect Microservices Collection",
+		"description": "Complete Postman collection for HealthConnect Spring Boot Microservices. Includes End-to-End Workflow and individual service endpoints.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "gateway_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "patient_url",
+			"value": "http://localhost:8081",
+			"type": "string"
+		},
+		{
+			"key": "practitioner_url",
+			"value": "http://localhost:8082",
+			"type": "string"
+		},
+		{
+			"key": "appointment_url",
+			"value": "http://localhost:8083",
+			"type": "string"
+		},
+		{
+			"key": "prescription_url",
+			"value": "http://localhost:8084",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. End-to-End Consultation Workflow (Gateway :8080)",
+			"item": [
+				{
+					"name": "Step 1: Register Patient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Abhinash\",\n  \"age\": 22,\n  \"gender\": \"Male\",\n  \"email\": \"abhinash@gmail.com\",\n  \"phone\": \"9876543210\",\n  \"address\": \"Vijayawada\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/patients",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"patients"
+							]
+						},
+						"description": "Registers a new patient through API Gateway"
+					}
+				},
+				{
+					"name": "Step 2: Register Practitioner",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Dr. Ramesh Kumar\",\n  \"specialization\": \"Cardiology\",\n  \"qualification\": \"MD, MBBS\",\n  \"experience\": 12,\n  \"email\": \"dr.ramesh@healthconnect.com\",\n  \"phone\": \"9123456789\",\n  \"available\": true\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/practitioners",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"practitioners"
+							]
+						},
+						"description": "Registers a doctor/practitioner through API Gateway"
+					}
+				},
+				{
+					"name": "Step 3: Book Appointment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"patientId\": 1,\n  \"practitionerId\": 1,\n  \"appointmentTime\": \"2026-10-15T10:30:00\",\n  \"consultationType\": \"VIDEO\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/appointments",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"appointments"
+							]
+						},
+						"description": "Books an appointment for Patient 1 with Doctor 1"
+					}
+				},
+				{
+					"name": "Step 4: Doctor Confirms Appointment",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/appointments/1/status?status=CONFIRMED",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"appointments",
+								"1",
+								"status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "CONFIRMED"
+								}
+							]
+						},
+						"description": "Updates appointment status to CONFIRMED"
+					}
+				},
+				{
+					"name": "Step 5: Start Consultation",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/appointments/1/status?status=IN_PROGRESS",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"appointments",
+								"1",
+								"status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "IN_PROGRESS"
+								}
+							]
+						},
+						"description": "Updates appointment status to IN_PROGRESS"
+					}
+				},
+				{
+					"name": "Step 6: Complete Consultation",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/appointments/1/status?status=COMPLETED",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"appointments",
+								"1",
+								"status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "COMPLETED"
+								}
+							]
+						},
+						"description": "Updates appointment status to COMPLETED"
+					}
+				},
+				{
+					"name": "Step 7: Issue Digital Prescription",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"appointmentId\": 1,\n  \"patientId\": 1,\n  \"practitionerId\": 1,\n  \"diagnosis\": \"Acute Chest Pain & Hypertension\",\n  \"medicines\": \"Amlodipine 5mg - 1 daily, Aspirin 75mg - 1 daily after dinner\",\n  \"instructions\": \"Rest for 3 days, drink plenty of water, follow up in 1 week\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/prescriptions",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"prescriptions"
+							]
+						},
+						"description": "Issues a digital prescription for Appointment 1"
+					}
+				},
+				{
+					"name": "Step 8: Patient Views Prescriptions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/prescriptions/patient/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"prescriptions",
+								"patient",
+								"1"
+							]
+						},
+						"description": "Retrieves all digital prescriptions for Patient 1"
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Patient Service",
+			"item": [
+				{
+					"name": "Create Patient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Sita Devi\",\n  \"age\": 45,\n  \"gender\": \"Female\",\n  \"email\": \"sita@gmail.com\",\n  \"phone\": \"9876501234\",\n  \"address\": \"Hyderabad\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/patients",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"patients"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Patients",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/patients",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"patients"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Patient by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/patients/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"patients",
+								"1"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Patient",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Abhinash Rao\",\n  \"age\": 23,\n  \"gender\": \"Male\",\n  \"email\": \"abhinash.rao@gmail.com\",\n  \"phone\": \"9876543210\",\n  \"address\": \"Vijayawada, AP\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/patients/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"patients",
+								"1"
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Patient",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/patients/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"patients",
+								"1"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Practitioner Service",
+			"item": [
+				{
+					"name": "Create Practitioner",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Dr. Priya Sharma\",\n  \"specialization\": \"Dermatology\",\n  \"qualification\": \"MD, DNB\",\n  \"experience\": 8,\n  \"email\": \"dr.priya@healthconnect.com\",\n  \"phone\": \"9812345678\",\n  \"available\": true\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/practitioners",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"practitioners"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Practitioners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/practitioners",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"practitioners"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Practitioner by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/practitioners/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"practitioners",
+								"1"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Practitioner",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Dr. Ramesh Kumar\",\n  \"specialization\": \"Interventional Cardiology\",\n  \"qualification\": \"MD, DM, MBBS\",\n  \"experience\": 15,\n  \"email\": \"dr.ramesh@healthconnect.com\",\n  \"phone\": \"9123456789\",\n  \"available\": true\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/practitioners/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"practitioners",
+								"1"
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Practitioner",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/practitioners/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"practitioners",
+								"1"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Appointment Service",
+			"item": [
+				{
+					"name": "Book Appointment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"patientId\": 1,\n  \"practitionerId\": 1,\n  \"appointmentTime\": \"2026-10-20T11:00:00\",\n  \"consultationType\": \"IN_PERSON\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/appointments",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"appointments"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Appointments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/appointments",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"appointments"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Appointment by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/appointments/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"appointments",
+								"1"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Status to CONFIRMED",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/appointments/1/status?status=CONFIRMED",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"appointments",
+								"1",
+								"status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "CONFIRMED"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Cancel Appointment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/appointments/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"appointments",
+								"1"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Prescription Service",
+			"item": [
+				{
+					"name": "Create Prescription",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"appointmentId\": 1,\n  \"patientId\": 1,\n  \"practitionerId\": 1,\n  \"diagnosis\": \"Seasonal Allergies\",\n  \"medicines\": \"Cetirizine 10mg once daily\",\n  \"instructions\": \"Take before bed\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/prescriptions",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"prescriptions"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Prescriptions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/prescriptions",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"prescriptions"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Prescription by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/prescriptions/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"prescriptions",
+								"1"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Prescriptions by Patient ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/prescriptions/patient/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"prescriptions",
+								"patient",
+								"1"
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Prescription",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/prescriptions/1",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"prescriptions",
+								"1"
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}

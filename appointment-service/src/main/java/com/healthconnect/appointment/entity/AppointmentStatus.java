@@ -1,0 +1,9 @@
+package com.healthconnect.appointment.entity;
+
+public enum AppointmentStatus {
+    BOOKED,
+    CONFIRMED,
+    IN_PROGRESS,
+    COMPLETED,
+    CANCELLED
+}

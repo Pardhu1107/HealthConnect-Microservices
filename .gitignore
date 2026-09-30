@@ -1,0 +1,26 @@
+# Maven target directories
+**/target/
+**/target/*
+
+# Eclipse / STS metadata
+**/.classpath
+**/.project
+**/.settings/
+**/.factorypath
+
+# Compiled class files
+**/*.class
+
+# Package files
+**/*.jar
+**/*.war
+**/*.ear
+**/*.zip
+**/*.tar.gz
+
+# Logs
+**/*.log
+
+# Operating System files
+.DS_Store
+Thumbs.db
